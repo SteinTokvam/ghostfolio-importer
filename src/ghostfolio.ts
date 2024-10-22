@@ -1,9 +1,9 @@
-export async function uploadActivities(activities: any) {
-  return await fetch("http://localhost:3333/api/v1/import", {
+export async function uploadActivities(activities: any, token: string) {
+  return await fetch("https://ghostfol.io/api/v1/import", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE4OGJhY2VhLWYxMTItNDQ1YS05YmFhLTc1NmFlNDkzYWY3ZCIsImlhdCI6MTcyOTUxNjUzOSwiZXhwIjoxNzQ1MDY4NTM5fQ.nSLqREVdk9OPwis666uFuVEWpU0j6dl-xb_WfigF1Gg"}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ activities: activities }),
   })

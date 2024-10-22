@@ -3,7 +3,12 @@ import path from "path";
 import { uploadActivities } from "./ghostfolio.js";
 import { fetchSymbolFromYahoo } from "./Yahoo.js";
 
-export function readCSV(file: string, ghostfolio_account_id: string, base_currency: string = "NOK") {
+export function readCSV(
+  file: string,
+  ghostfolio_account_id: string,
+  base_currency: string = "NOK",
+  ghostfolio_token
+) {
   fs.readFile(path.join(process.cwd(), file), "utf16le", async (err, data) => {
     if (err) {
       console.error("Feil ved lesing av fil:", err);
@@ -47,15 +52,14 @@ export function readCSV(file: string, ghostfolio_account_id: string, base_curren
         unitPrice: parseFloat(row.kurs.replaceAll(" ", "")),
       };
     });
-    
+
     const transactions = await addSymbolFromYahoo(activities);
     console.log("Read transactions:");
     console.table(transactions);
     const ghostfolioActivities = await uploadActivities(
-      transactions.filter(
-        (transaction) => transaction.comment !== "eSports Fund"
-      ).map(
-        (transaction) => ({
+      transactions
+        .filter((transaction) => transaction.comment !== "eSports Fund")
+        .map((transaction) => ({
           accountId: transaction.accountId,
           currency: transaction.currency,
           dataSource: transaction.dataSource,
@@ -66,8 +70,8 @@ export function readCSV(file: string, ghostfolio_account_id: string, base_curren
           symbol: transaction.symbol,
           type: transaction.type,
           unitPrice: transaction.unitPrice,
-        })
-      )
+        })),
+      ghostfolio_token
     );
 
     const ghostfolioIds = ghostfolioActivities.map(
@@ -81,8 +85,8 @@ export function readCSV(file: string, ghostfolio_account_id: string, base_curren
         excluded.push(transaction);
       });
 
-      console.log("transactions not imported:")
-      // @ts-ignore
+    console.log("transactions not imported:");
+    // @ts-ignore
     console.table(excluded);
   });
 }
