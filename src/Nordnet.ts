@@ -3,7 +3,7 @@ import path from "path";
 import { uploadActivities } from "./ghostfolio.js";
 import { fetchSymbolFromYahoo } from "./Yahoo.js";
 
-export function readCSV(file: string, ghostfolio_account_id: string) {
+export function readCSV(file: string, ghostfolio_account_id: string, base_currency: string = "NOK") {
   fs.readFile(path.join(process.cwd(), file), "utf16le", async (err, data) => {
     if (err) {
       console.error("Feil ved lesing av fil:", err);
@@ -33,7 +33,7 @@ export function readCSV(file: string, ghostfolio_account_id: string) {
       return {
         id: row.id,
         accountId: ghostfolio_account_id,
-        currency: row.valutaend ? row.valutaend : "NOK",
+        currency: row.valutaend ? row.valutaend : base_currency,
         dataSource: "YAHOO",
         comment:
           row.verdipapir === "YAR" || row.verdipapir === "EQNR"

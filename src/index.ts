@@ -6,7 +6,7 @@ import { readCSV } from "./Nordnet.js";
   if (process.argv.length < 3) {
     console.log("Usage: npm start <Kron|Nordnet> <options>");
     console.log("Options depends on the import type...");
-    console.log("Example: npm start Nordnet nordnet.csv d99d9a00-b9df-4881-9b3d-50a0a0451301");
+    console.log("Example: npm start Nordnet nordnet.csv d99d9a00-b9df-4881-9b3d-50a0a0451301 NOK");
     console.log("Example: npm start Kron 82ac268e-9810-4c42-965b-84dfdbf67888 f90698c7-4c14-4499-ad64-6ded476eca03 cc2d6756-6609-4c59-8a24-a168241730b7");
   }
 
@@ -64,10 +64,10 @@ import { readCSV } from "./Nordnet.js";
   } else if (importType === "Nordnet") {
     if (process.argv.length < 5) {
       console.log(
-        "Usage: npm start Nordnet <filename> <ghostfolio_account_id>"
+        "Usage: npm start Nordnet <filename> <ghostfolio_account_id> <base_currency>"
       );
       return;
     }
-    readCSV(process.argv[3], process.argv[4]);
+    readCSV(process.argv[3], process.argv[4], process.argv[5]);
   }
 })();
